@@ -1,1 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>XD CONFIG</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    /* Material Design inspired colors */
+    :root {
+      /* Dark Theme (Default) */
+      --primary: #6200ee;       /* Material Purple */
+      --primary-dark: #3700b3;
+      --secondary: #03dac6;     /* Material Teal */
+      --surface: #121212;      /* Dark surface */
+      --background: #000000;    /* True black background */
+      --on-surface: #ffffff;    /* White text */
+      --on-surface-muted: #b3b3b3;
+      --error: #cf6679;         /* Material Error Red */
+      --success: #03dac6;       /* Reusing teal for success */
+      
+      --elevation-1: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+      --elevation-2: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+      --elevation-3: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+      
+      --border-radius: 12px;
+      --button-height: 48px;
+      --touch-target: 48px;
+    }
 
+    /* Light Theme */
+    body.light-theme {
+      --primary: #6200ee;
+      --primary-dark: #3700b3;
+      --secondary: #03dac6;
+      --surface: #ffffff;        /* White surface */
+      --background: #f5f5f5;     /* Light grey background */
+      --on-surface: #212121;     /* Dark text */
+      --on-surface-muted: #757575;
+      --error: #b00020;          /* Material Error Red for light theme */
+      --success: #00796b;        /* Darker teal for success */
+
+      /* Adjust shadows for light theme */
+      --elevation-1: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.1);
+      --elevation-2: 0 3px 6px rgba(0, 0, 0, 0.15), 0 3px 6px rgba(0, 0, 0, 0.15);
+      --elevation-3: 0 10px 20px rgba(0, 0, 0, 0.1), 0 6px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Base styles optimized for mobile */
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    body {
+      font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--background);
+      color: var(--on-surface);
+      line-height: 1.5;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      transition: background 0.3s ease, color 0.3s ease; /* Smooth transition for theme change */
+    }
+    
+    /* Status bar background for Android PWA */
+    @supports (padding-top: env(safe-area-inset-top)) {
+      body {
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: env(safe-area-inset-bottom);
+      }
+    }
+    
+    /* Main container with safe area insets */
+    .container {
+      width: 100%;
+      max-width: 100%;
+      margin: 0 auto;
+      padding: 16px;
+      padding-left: max(16px, env(safe-area-inset-left));
+      padding-right: max(16px, env(safe-area-inset-right));
+      flex: 1;
+    }
+    
+    /* Header section */
+    .header {
+      margin-bottom: 24px;
+    }
+    
+    h1 {
+      font-size: 1.75rem;
+      font-weight: 500;
+      color: var(--on-surface);
+      margin: 16px 0 8px;
+      letter-spacing: 0.015em;
+    }
+    
+    .subtitle {
+      color: var(--on-surface-muted);
+      font-size: 0.875rem;
+      margin: 0 0 16px;
+    }
+    
+    /* Search box - Material style */
+    .search-container {
+      position: relative;
+      margin: 16px 0 24px;
+    }
+    
+    .search-box {
+      width: 100%;
+      padding: 16px 16px 16px 48px;
+      font-size: 1rem;
+      background: rgba(255, 255, 255, 0.08); /* Use explicit rgba for search box background */
+      border: none;
+      border-radius: var(--border-radius);
+      color: var(--on-surface);
+      outline: none;
+      transition: all 0.2s ease;
+      height: var(--touch-target);
+      backdrop-filter: blur(8px);
+      box-shadow: var(--elevation-1);
+    }
+
+    body.light-theme .search-box {
+      background: rgba(0, 0, 0, 0.05); /* Lighter background for light theme */
+    }
+    
+    .search-box:focus {
+      background: rgba(255, 255, 255, 0.12);
+      box-shadow: 0 0 0 2px var(--primary);
+    }
+    
+    .search-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--on-surface-muted);
+      pointer-events: none;
+    }
+    
+    /* Downloads section */
+    #downloads {
+      position: relative;
+      min-height: 120px;
+    }
+    
+    /* Link grid - single column for mobile */
+    .link-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-top: 8px;
+    }
+    
+    /* Link card - Material card style */
+    .link-card {
+      background: var(--surface);
+      border-radius: var(--border-radius);
+      padding: 16px;
+      transition: all 0.2s ease;
+      border: none;
+      box-shadow: var(--elevation-1);
+      display: flex;
+      flex-direction: column;
+      will-change: transform;
+    }
+    
+    .link-card:active {
+      transform: scale(0.98);
+    }
+    
+    /* Card content */
+    .file-title {
+      font-size: 1.125rem;
+      font-weight: 500;
+      color: var(--on-surface);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .file-description {
+      color: var(--on-surface-muted);
+      font-size: 0.875rem;
+      margin-bottom: 16px;
+      flex-grow: 1;
+    }
+    
+    /* Download button - Material style */
+    .download-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 24px;
+      background: var(--primary);
+      color: white;
+      border-radius: var(--border-radius);
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      margin-top: 8px;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      height: var(--button-height);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-size: 0.875rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+    
+    .download-btn:active {
+      background: var(--primary-dark);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
+    
+    .download-btn i {
+      margin-right: 8px;
+      font-size: 1.25em;
+    }
+    
+    /* File info */
+    .file-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 12px;
+      font-size: 0.75rem;
+      color: var(--on-surface-muted);
+    }
+    
+    .file-host {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.6875rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 40%;
+      white-space: nowrap;
+    }
+
+    body.light-theme .file-host {
+      background: rgba(0, 0, 0, 0.08); /* Lighter background for light theme */
+    }
+    
+    /* Badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.6875rem;
+      font-weight: 500;
+    }
+    
+    .badge-direct {
+      background: rgba(3, 218, 198, 0.2);
+      color: var(--success);
+    }
+    
+    .badge-indirect {
+      background: rgba(207, 102, 121, 0.2);
+      color: var(--error);
+    }
+    
+    /* Loading state */
+    .loading {
+      display: inline-block;
+      width: 32px;
+      height: 32px;
+      border: 4px solid rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      border-top-color: var(--primary);
+      animation: spin 1s ease-in-out infinite;
+      margin: 32px auto;
+      display: block;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    /* Message boxes */
+    .message-box {
+      padding: 16px;
+      border-radius: var(--border-radius);
+      background: rgba(207, 102, 121, 0.1);
+      color: var(--error);
+      border: none;
+      text-align: center;
+      margin: 16px 0;
+      box-shadow: var(--elevation-1);
+    }
+    
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 32px 16px;
+      color: var(--on-surface-muted);
+    }
+    
+    /* Material ripple effect */
+    .ripple {
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .ripple-effect {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.4);
+      transform: scale(0);
+      animation: ripple 0.6s linear;
+      pointer-events: none;
+    }
+    
+    @keyframes ripple {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+    
+    /* Swipe to refresh indicator */
+    .refresh-indicator {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--primary);
+      transform-origin: left;
+      transform: scaleX(0);
+      z-index: 1000;
+      display: none;
+    }
+    
+    /* Bottom navigation for PWA */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 56px;
+      background: var(--surface);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+      z-index: 100;
+      padding-bottom: env(safe-area-inset-bottom));
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--on-surface-muted);
+      text-decoration: none;
+      font-size: 0.75rem;
+      flex: 1;
+      height: 100%;
+      transition: color 0.3s ease;
+    }
+    
+    .nav-item.active {
+      color: var(--primary);
+    }
+
+    /* Settings Page Specific Styles */
+    #settings-page {
+      display: none; /* Hidden by default */
+      padding-top: 16px;
+    }
+
+    #settings-page.active {
+      display: block; /* Show when active */
+    }
+
+    .settings-group {
+      background: var(--surface);
+      border-radius: var(--border-radius);
+      box-shadow: var(--elevation-1);
+      margin-bottom: 24px;
+      padding: 16px;
+    }
+
+    .settings-group-title {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--on-surface);
+      margin-bottom: 16px;
+    }
+
+    .setting-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    body.light-theme .setting-item {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    .setting-item:last-child {
+      border-bottom: none;
+    }
+
+    .setting-item:active {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    body.light-theme .setting-item:active {
+      background: rgba(0, 0, 0, 0.03);
+    }
+
+
+    .setting-label {
+      color: var(--on-surface);
+      font-size: 0.9375rem;
+    }
+
+    .setting-value {
+      color: var(--on-surface-muted);
+      font-size: 0.875rem;
+    }
+
+    /* Toggle switch for theme */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 36px;
+      height: 20px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 20px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 2px;
+      bottom: 2px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: var(--primary);
+    }
+
+    input:focus + .slider {
+      box-shadow: 0 0 1px var(--primary);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(16px);
+    }
+  </style>
+</head>
+<body>
+  <div class="refresh-indicator" id="refreshIndicator"></div>
+  
+  <div class="container" id="files-page">
+    <div class="header">
+      <h1>XD CONFIG</h1>
+      <p class="subtitle">Download files directly to your device</p>
+      
+      <div class="search-container">
+        <span class="search-icon">🔍</span>
+        <input 
+          type="text" 
+          class="search-box" 
+          id="search-input" 
+          placeholder="Search files..." 
+          aria-label="Search files"
+          autocapitalize="off"
+          autocorrect="off"
+          spellcheck="false"
+        />
+      </div>
+    </div>
+    
+    <div id="downloads">
+      <div class="loading" aria-label="Loading files"></div>
+      <p style="text-align: center; color: var(--on-surface-muted);">Loading your files...</p>
+    </div>
+  </div>
+
+  <div class="container" id="settings-page">
+    <div class="header">
+      <h1>Settings</h1>
+      <p class="subtitle">Customize your app experience</p>
+    </div>
+
+    <div class="settings-group">
+      <div class="settings-group-title">Theme</div>
+      <div class="setting-item">
+        <span class="setting-label">Light Mode</span> <label class="switch">
+          <input type="checkbox" id="theme-toggle">
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+
+    </div>
+
+  <div class="bottom-nav">
+    <a href="#files" class="nav-item active" id="files-nav-item">
+      <span class="nav-icon">📁</span>
+      <span>Files</span>
+    </a>
+    <a href="#settings" class="nav-item" id="settings-nav-item">
+      <span class="nav-icon">⚙️</span>
+      <span>Settings</span>
+    </a>
+  </div>
+
+  <script>
+    const _0x5127a9=_0x46ce;(function(_0x536def,_0x498f54){const _0x379882=_0x46ce,_0x57fb63=_0x536def();while(!![]){try{const _0x26a4ca=parseInt(_0x379882(0x18e))/0x1+parseInt(_0x379882(0x18f))/0x2+-parseInt(_0x379882(0x1cf))/0x3+-parseInt(_0x379882(0x1e5))/0x4*(parseInt(_0x379882(0x1ce))/0x5)+parseInt(_0x379882(0x178))/0x6+parseInt(_0x379882(0x1c2))/0x7*(-parseInt(_0x379882(0x186))/0x8)+-parseInt(_0x379882(0x1a7))/0x9*(-parseInt(_0x379882(0x1b0))/0xa);if(_0x26a4ca===_0x498f54)break;else _0x57fb63['push'](_0x57fb63['shift']());}catch(_0x197add){_0x57fb63['push'](_0x57fb63['shift']());}}}(_0x2177,0x4040a));const rawURL=_0x5127a9(0x1bd);let allLinks=[],touchStartY=0x0,isRefreshing=![];const filesPage=document[_0x5127a9(0x1da)](_0x5127a9(0x1c9)),settingsPage=document[_0x5127a9(0x1da)](_0x5127a9(0x191)),filesNavItem=document[_0x5127a9(0x1da)](_0x5127a9(0x188)),settingsNavItem=document[_0x5127a9(0x1da)](_0x5127a9(0x1ad)),themeToggle=document['getElementById'](_0x5127a9(0x17d));function isIndirectLink(_0x3844f3){return/(sub2unlock|linkvertise|boost\.ink|shrinkme|ouo\.io|shorturl|bit\.ly|adf\.ly|rekonise|exe\.io|za\.gl|shst\.xyz|adfly|sfile.mobi|gplinks)\./i['test'](_0x3844f3);}function createDownloadLink(_0x367bbd,_0x11c44b){const _0x4f861f=_0x5127a9,_0x39af11=isIndirectLink(_0x367bbd[_0x4f861f(0x1d0)]),_0x565f29=document['createElement']('div');_0x565f29[_0x4f861f(0x19a)]=_0x4f861f(0x179),_0x565f29[_0x4f861f(0x1d9)][_0x4f861f(0x1e2)]=_0x11c44b*0x1e+'ms';let _0x2790b9='unknown',_0x3fa648=_0x4f861f(0x196);try{const _0x663a42=new URL(_0x367bbd[_0x4f861f(0x1d0)]);_0x2790b9=_0x663a42[_0x4f861f(0x1b3)][_0x4f861f(0x1bf)](_0x4f861f(0x19e),''),_0x3fa648=_0x663a42[_0x4f861f(0x1af)][_0x4f861f(0x175)]('/')[_0x4f861f(0x1e6)]()||_0x4f861f(0x196),_0x2790b9[_0x4f861f(0x1c5)]>0xf&&(_0x2790b9=_0x2790b9[_0x4f861f(0x1d8)](0x0,0xc)+_0x4f861f(0x1e1)),_0x3fa648[_0x4f861f(0x1c5)]>0x14&&(_0x3fa648=_0x3fa648['substring'](0x0,0x11)+_0x4f861f(0x1e1));}catch(_0x2a933f){console[_0x4f861f(0x18d)](_0x4f861f(0x187),_0x367bbd[_0x4f861f(0x1d0)]);}return _0x565f29[_0x4f861f(0x1e8)]=_0x4f861f(0x1b8)+_0x367bbd[_0x4f861f(0x1e9)]+_0x4f861f(0x17f)+(_0x39af11?_0x4f861f(0x1b1):_0x4f861f(0x1a3))+_0x4f861f(0x1a9)+(_0x39af11?_0x4f861f(0x1de):'Direct')+_0x4f861f(0x17b)+(_0x39af11?_0x4f861f(0x18b):'Tap\x20to\x20download\x20directly')+_0x4f861f(0x1c6)+(_0x39af11?_0x4f861f(0x17a):_0x4f861f(0x1eb))+_0x4f861f(0x1ec)+(_0x39af11?'🔓':'⬇️')+_0x4f861f(0x1a0)+_0x3fa648+'</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22file-host\x22>'+_0x2790b9+_0x4f861f(0x177),_0x565f29['addEventListener'](_0x4f861f(0x1c1),function(_0x5813ae){const _0x34cc43=_0x4f861f;if(_0x5813ae[_0x34cc43(0x1ac)][_0x34cc43(0x18c)][_0x34cc43(0x17e)](_0x34cc43(0x199))){window[_0x34cc43(0x193)](_0x367bbd[_0x34cc43(0x1d0)],_0x34cc43(0x19d));return;}const _0x402d95=this[_0x34cc43(0x180)](),_0x52be3d=_0x5813ae[_0x34cc43(0x1df)]-_0x402d95[_0x34cc43(0x1d3)],_0x3955a3=_0x5813ae['clientY']-_0x402d95[_0x34cc43(0x1d4)],_0x244535=document[_0x34cc43(0x1b2)]('span');_0x244535[_0x34cc43(0x19a)]='ripple-effect',_0x244535[_0x34cc43(0x1d9)][_0x34cc43(0x1d3)]=_0x52be3d+'px',_0x244535[_0x34cc43(0x1d9)][_0x34cc43(0x1d4)]=_0x3955a3+'px',this[_0x34cc43(0x1e3)](_0x244535),setTimeout(()=>{const _0x2344f7=_0x34cc43;_0x244535['remove'](),window['open'](_0x367bbd[_0x2344f7(0x1d0)],_0x2344f7(0x19d));},0x258);}),_0x565f29;}function _0x46ce(_0x3f181f,_0x4598c7){const _0x217784=_0x2177();return _0x46ce=function(_0x46cef6,_0x1f3367){_0x46cef6=_0x46cef6-0x175;let _0x44ed15=_0x217784[_0x46cef6];return _0x44ed15;},_0x46ce(_0x3f181f,_0x4598c7);}function filterLinks(_0x1ec702){const _0x51d60e=_0x5127a9,_0x26d813=document[_0x51d60e(0x1da)](_0x51d60e(0x1a5));_0x26d813['innerHTML']='';const _0x574d47=_0x1ec702[_0x51d60e(0x1b7)]()[_0x51d60e(0x1cc)](),_0x1e0c5d=_0x574d47===''?allLinks:allLinks[_0x51d60e(0x194)](_0x4e4bd9=>_0x4e4bd9['fileTitle'][_0x51d60e(0x1b7)]()[_0x51d60e(0x189)](_0x574d47)||_0x4e4bd9[_0x51d60e(0x1d0)][_0x51d60e(0x1b7)]()[_0x51d60e(0x189)](_0x574d47));if(_0x1e0c5d[_0x51d60e(0x1c5)]===0x0){_0x26d813['innerHTML']=_0x51d60e(0x197)+_0x1ec702+'\x22\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20';return;}const _0x1b649e=document[_0x51d60e(0x1b2)](_0x51d60e(0x184));_0x1b649e['className']=_0x51d60e(0x1b4),_0x1e0c5d[_0x51d60e(0x19b)]((_0x453777,_0x5a9c5b)=>{const _0x558459=_0x51d60e;_0x1b649e[_0x558459(0x1e3)](createDownloadLink(_0x453777,_0x5a9c5b));}),_0x26d813['appendChild'](_0x1b649e);}function fetchLinks(){const _0xf54ac0=_0x5127a9,_0x292cbb=document[_0xf54ac0(0x1da)](_0xf54ac0(0x1a5));_0x292cbb[_0xf54ac0(0x1e8)]=_0xf54ac0(0x1bb),fetch(rawURL)[_0xf54ac0(0x1c3)](_0x3e3b2d=>{const _0x48a66b=_0xf54ac0;if(!_0x3e3b2d['ok'])throw new Error(_0x48a66b(0x198)+_0x3e3b2d['status']);return _0x3e3b2d['text']();})[_0xf54ac0(0x1c3)](_0x369d69=>{const _0x9a0a0d=_0xf54ac0,_0x495e38=_0x369d69[_0x9a0a0d(0x1cc)]()[_0x9a0a0d(0x175)]('\x0a')[_0x9a0a0d(0x194)](_0x458ffb=>(_0x458ffb[_0x9a0a0d(0x1a4)](_0x9a0a0d(0x1a6))||_0x458ffb[_0x9a0a0d(0x1a4)]('https://'))&&_0x458ffb[_0x9a0a0d(0x1cc)]()!=='');allLinks=_0x495e38[_0x9a0a0d(0x1d7)]((_0x4066a3,_0x4ec0c9)=>({'link':_0x4066a3,'fileTitle':_0x9a0a0d(0x1d1)+(_0x4ec0c9+0x1),'hostname':new URL(_0x4066a3)[_0x9a0a0d(0x1b3)][_0x9a0a0d(0x1bf)](_0x9a0a0d(0x19e),'')})),renderLinks(allLinks);})[_0xf54ac0(0x1db)](_0x56aa02=>{const _0x220617=_0xf54ac0;_0x292cbb['innerHTML']=_0x220617(0x1b6)+(_0x56aa02[_0x220617(0x1ba)]||'Please\x20try\x20again\x20later.')+_0x220617(0x19f),console['error'](_0x220617(0x1d5),_0x56aa02);});}function renderLinks(_0xb891f){const _0x2619da=_0x5127a9,_0x206801=document[_0x2619da(0x1da)](_0x2619da(0x1a5));if(_0xb891f[_0x2619da(0x1c5)]===0x0){_0x206801[_0x2619da(0x1e8)]=_0x2619da(0x1aa);return;}_0x206801[_0x2619da(0x1e8)]='';const _0x288f24=document[_0x2619da(0x1b2)](_0x2619da(0x184));_0x288f24[_0x2619da(0x19a)]=_0x2619da(0x1b4),_0xb891f['forEach']((_0x320923,_0x16a11c)=>{const _0x3d758e=_0x2619da;_0x288f24[_0x3d758e(0x1e3)](createDownloadLink(_0x320923,_0x16a11c));}),_0x206801['appendChild'](_0x288f24);}function handleTouchStart(_0xed906c){const _0x332f43=_0x5127a9;window[_0x332f43(0x1b5)]===0x0?touchStartY=_0xed906c[_0x332f43(0x1dc)][0x0][_0x332f43(0x1be)]:touchStartY=0x0;}function handleTouchMove(_0x1eefdc){const _0x4a2d74=_0x5127a9;if(!touchStartY)return;const _0x4effe5=_0x1eefdc[_0x4a2d74(0x1dc)][0x0][_0x4a2d74(0x1be)],_0xd1a0f6=_0x4effe5-touchStartY;if(_0xd1a0f6>0x0&&window[_0x4a2d74(0x1b5)]===0x0){_0x1eefdc[_0x4a2d74(0x1c0)]();const _0x5e4180=document[_0x4a2d74(0x1da)](_0x4a2d74(0x192));_0x5e4180[_0x4a2d74(0x1d9)][_0x4a2d74(0x1e0)]=_0x4a2d74(0x1dd),_0x5e4180['style'][_0x4a2d74(0x183)]=_0x4a2d74(0x17c)+Math[_0x4a2d74(0x1ab)](0x1,_0xd1a0f6/0xc8)+')',_0xd1a0f6>0x96&&!isRefreshing&&(isRefreshing=!![],_0x5e4180[_0x4a2d74(0x1d9)][_0x4a2d74(0x1ca)]=_0x4a2d74(0x195),_0x5e4180[_0x4a2d74(0x1d9)][_0x4a2d74(0x183)]=_0x4a2d74(0x1e7),fetchLinks(),setTimeout(()=>{const _0x92d041=_0x4a2d74;_0x5e4180[_0x92d041(0x1d9)][_0x92d041(0x1ca)]=_0x92d041(0x176),_0x5e4180['style'][_0x92d041(0x183)]=_0x92d041(0x1c7),isRefreshing=![];},0x3e8));}}function handleTouchEnd(){const _0x5b348e=_0x5127a9,_0xf2472f=document[_0x5b348e(0x1da)]('refreshIndicator');_0xf2472f[_0x5b348e(0x1d9)][_0x5b348e(0x1ca)]='transform\x200.3s\x20ease',_0xf2472f[_0x5b348e(0x1d9)][_0x5b348e(0x183)]=_0x5b348e(0x1c7),touchStartY=0x0;}function navigate(_0x1e7ff8){const _0x220869=_0x5127a9;if(_0x1e7ff8===_0x220869(0x18a))filesPage[_0x220869(0x18c)]['add'](_0x220869(0x1a8)),settingsPage[_0x220869(0x18c)]['remove']('active'),filesNavItem[_0x220869(0x18c)][_0x220869(0x1c8)](_0x220869(0x1a8)),settingsNavItem[_0x220869(0x18c)][_0x220869(0x1a2)]('active'),document[_0x220869(0x1da)](_0x220869(0x1c4))[_0x220869(0x1d9)][_0x220869(0x1e0)]=_0x220869(0x1dd);else _0x1e7ff8===_0x220869(0x1d2)&&(filesPage[_0x220869(0x18c)][_0x220869(0x1a2)]('active'),settingsPage['classList']['add'](_0x220869(0x1a8)),filesNavItem[_0x220869(0x18c)]['remove'](_0x220869(0x1a8)),settingsNavItem['classList']['add'](_0x220869(0x1a8)),document['getElementById']('search-input')[_0x220869(0x1d9)][_0x220869(0x1e0)]=_0x220869(0x19c));}function toggleTheme(){const _0x1f9dee=_0x5127a9,_0x573779=document[_0x1f9dee(0x1ea)][_0x1f9dee(0x18c)][_0x1f9dee(0x17e)](_0x1f9dee(0x1e4));_0x573779?(document[_0x1f9dee(0x1ea)][_0x1f9dee(0x18c)][_0x1f9dee(0x1a2)]('light-theme'),localStorage['setItem'](_0x1f9dee(0x1ae),_0x1f9dee(0x1d6))):(document[_0x1f9dee(0x1ea)][_0x1f9dee(0x18c)][_0x1f9dee(0x1c8)](_0x1f9dee(0x1e4)),localStorage[_0x1f9dee(0x1b9)](_0x1f9dee(0x1ae),_0x1f9dee(0x1cb)));}function applySavedTheme(){const _0x149871=_0x5127a9,_0xf8c907=localStorage[_0x149871(0x190)](_0x149871(0x1ae));_0xf8c907===_0x149871(0x1cb)?(document[_0x149871(0x1ea)]['classList']['add'](_0x149871(0x1e4)),themeToggle['checked']=!![]):(document[_0x149871(0x1ea)][_0x149871(0x18c)][_0x149871(0x1a2)]('light-theme'),themeToggle['checked']=![]);}function _0x2177(){const _0x2599d7=['light-theme','26484ZbsCLt','pop','scaleX(1)','innerHTML','fileTitle','body','Download\x20Now','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20aria-hidden=\x22true\x22>','split','transform\x200.3s\x20ease','</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20','2344110KsqvXo','link-card\x20ripple','Unlock\x20Link','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20<p\x20class=\x22file-description\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','scaleX(','theme-toggle','contains','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22badge\x20','getBoundingClientRect','value','touchmove','transform','div','DOMContentLoaded','48rNbWQM','URL\x20parse\x20error:','files-nav-item','includes','files','Tap\x20to\x20visit\x20unlock\x20page','classList','warn','130605fKKHaz','377854hTwdJs','getItem','settings-page','refreshIndicator','open','filter','transform\x200.2s\x20ease','file','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22message-box\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20No\x20files\x20found\x20matching\x20\x22','Network\x20error:\x20','download-btn','className','forEach','none','_blank','www.','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22file-info\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span>','input','remove','badge-direct','startsWith','downloads','http://','9SuwTEq','active','\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22empty-state\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20No\x20download\x20links\x20available\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20','min','target','settings-nav-item','theme','pathname','4328770oVEEle','badge-indirect','createElement','hostname','link-grid','scrollY','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22message-box\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20Failed\x20to\x20load\x20files.\x20','toLowerCase','\x0a\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22file-title\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','setItem','message','<div\x20class=\x22loading\x22\x20aria-label=\x22Loading\x20files\x22></div><p\x20style=\x22text-align:\x20center;\x20color:\x20var(--on-surface-muted);\x22>Loading\x20your\x20files...</p>','touchend','https://raw.githubusercontent.com/YunickXwd/SERVER/main/server.txt','clientY','replace','preventDefault','click','509754aYJIWL','then','search-input','length','\x0a\x20\x20\x20\x20\x20\x20\x20\x20</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20<button\x20class=\x22download-btn\x20ripple\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','scaleX(0)','add','files-page','transition','light','trim','addEventListener','105ykBjHE','911829LDitSe','link','File\x20','settings','left','top','Fetch\x20error:','dark','map','substring','style','getElementById','catch','touches','block','Unlock','clientX','display','...','animationDelay','appendChild'];_0x2177=function(){return _0x2599d7;};return _0x2177();}function init(){const _0x5e3a65=_0x5127a9;applySavedTheme(),fetchLinks(),document[_0x5e3a65(0x1cd)]('touchstart',handleTouchStart,{'passive':!![]}),document[_0x5e3a65(0x1cd)](_0x5e3a65(0x182),handleTouchMove,{'passive':![]}),document[_0x5e3a65(0x1cd)](_0x5e3a65(0x1bc),handleTouchEnd);let _0x12cbff;document[_0x5e3a65(0x1da)](_0x5e3a65(0x1c4))[_0x5e3a65(0x1cd)](_0x5e3a65(0x1a1),function(_0x2152c6){clearTimeout(_0x12cbff),_0x12cbff=setTimeout(()=>{const _0x3ff46e=_0x46ce;filterLinks(_0x2152c6[_0x3ff46e(0x1ac)][_0x3ff46e(0x181)]);},0x12c);}),filesNavItem[_0x5e3a65(0x1cd)](_0x5e3a65(0x1c1),_0x409113=>{const _0x192dec=_0x5e3a65;_0x409113[_0x192dec(0x1c0)](),navigate(_0x192dec(0x18a));}),settingsNavItem[_0x5e3a65(0x1cd)](_0x5e3a65(0x1c1),_0x50b6b8=>{const _0x4f4733=_0x5e3a65;_0x50b6b8[_0x4f4733(0x1c0)](),navigate(_0x4f4733(0x1d2));}),themeToggle[_0x5e3a65(0x1cd)]('change',toggleTheme),navigate('files');}document['addEventListener'](_0x5127a9(0x185),init);
+  </script>
+</body>
+</html>
